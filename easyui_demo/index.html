@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" content="height=device-height"/>
+		<link rel="stylesheet" type="text/css" href="css/themes/default/easyui.css"/>
+		<link rel="stylesheet" type="text/css" href="css/main.css"/>
+		<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/jquery.easyui.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/main.js" type="text/javascript" charset="utf-8"></script>
+		<title>demo</title>
+	</head>
+	<body  class="easyui-layout" >
+			<!--north-->
+			<div id="head" data-options="region:'north'">
+				<div id="title">
+					<h2>Title</h2>
+				</div>
+				<div id="login">
+					<a href="#">login</a>
+					<a href="#">...</a>
+				</div>
+			</div>
+			<!--west-->
+			<div id="left_side_panel" data-options="region:'west'">
+				<div class="easyui-accordion">
+					<div id="menu_login" title="login">
+						<ul class="easyui-tree">
+							<li>
+								<span>login/login out</span>
+								<ul>
+									<li>login</li>
+									<li>login out</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+					<div id="menu_upload" title="upload">
+						<ul class="easyui-tree">
+							<li>
+								<span>upload</span>
+								<span>data grid</span>
+								<ul>
+									<li id="li_data_grid">data grid</li>
+								</ul>								
+							</li>
+
+						</ul>
+					</div>
+				</div>	
+			</div>
+			<!--center-->
+			<div id="center" data-options="region:'center',title:'Title'">
+				<!--file upload-->
+				<div id="upload_panel">
+					<form id="upload_form" enctype="multipart/form-data" name="file_info">
+						<div style="margin-bottom: 15px;">
+							<div>文件</div>
+							<input class="easyui-filebox" name='file' data-options="prompt:'选择文件'" id="file" style="width: 100%;"></input>
+						</div>
+					</form>
+					<div align="center">
+						<a href="#" class="easyui-linkbutton" id="btn_upload" style="width: 100px;">上传</a>
+					</div>
+				</div>
+			</div>
+			<!--south-->
+			<div id="foot" data-options="region:'south'">
+				
+			</div>
+			<div id="data_grid" style="display: none;">
+				<table class="easyui-datagrid" 
+					data-options="url:'datagrid_data1.json',method:'get',singleSelect:true,collapsible:true">
+					<thead>
+						<tr>
+							<th data-options="field:'itemid',width:80">Item ID</th>
+							<th data-options="field:'productid',width:80">Product Id</th>
+							<th data-options="field:'listprice',width:80,align:'right'">List Price</th>
+							<th data-options="field:'unitcost',width:80,align:'right'">Unit Cost</th>
+							<th data-options="field:'attr1',width:250">Attribute</th>
+							<th data-options="field:'status',width:60,align:'center'">Status</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+	</body>
+</html>
