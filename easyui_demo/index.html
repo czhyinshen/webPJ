@@ -51,36 +51,33 @@
 			<!--center-->
 			<div id="center" data-options="region:'center',title:'Title'">
 				<!--file upload-->
-				<div id="upload_panel">
-					<form id="upload_form" enctype="multipart/form-data" name="file_info">
-						<div style="margin-bottom: 15px;">
-							<div>文件</div>
-							<input class="easyui-filebox" name='file' data-options="prompt:'选择文件'" id="file" style="width: 100%;"></input>
-						</div>
-					</form>
+				<div id="upload_panel_form">
+					<div style="margin-bottom: 15px;">
+						<div>文件 Form</div>
+						<form id="upload_form" enctype="multipart/form-data" name="file_info">
+							<input class="easyui-filebox" name='file' data-options="prompt:'选择文件'" id="excel_file_form" style="width: 100%;" />
+						</form>
+					</div>
 					<div align="center">
-						<a href="#" class="easyui-linkbutton" id="btn_upload" style="width: 100px;">上传</a>
+						<a href="#" class="easyui-linkbutton" id="btn_upload_form" style="width: 100px;">上传</a>
+					</div>
+					<iframe id="hidden_iframe" name="hidden_iframe" style="display: none;" ></iframe>
+				</div>
+				
+				<div id="upload_panel_ajax">
+					<div style="margin-bottom: 15px;">
+						<div>文件 Ajax</div>
+						<input class="easyui-filebox" name="file" data-options="prompt:'选择文件'" id="excel_file_ajax" style="width: 100%;" />
+					</div>
+					<div align="center">
+						<a href="#" class="easyui-linkbutton" id="btn_upload_ajax" style="width: 100px;">上传</a>
 					</div>
 				</div>
+				
 			</div>
 			<!--south-->
 			<div id="foot" data-options="region:'south'">
 				
-			</div>
-			<div id="data_grid" style="display: none;">
-				<table class="easyui-datagrid" 
-					data-options="url:'datagrid_data1.json',method:'get',singleSelect:true,collapsible:true">
-					<thead>
-						<tr>
-							<th data-options="field:'itemid',width:80">Item ID</th>
-							<th data-options="field:'productid',width:80">Product Id</th>
-							<th data-options="field:'listprice',width:80,align:'right'">List Price</th>
-							<th data-options="field:'unitcost',width:80,align:'right'">Unit Cost</th>
-							<th data-options="field:'attr1',width:250">Attribute</th>
-							<th data-options="field:'status',width:60,align:'center'">Status</th>
-						</tr>
-					</thead>
-				</table>
 			</div>
 	</body>
 </html>
