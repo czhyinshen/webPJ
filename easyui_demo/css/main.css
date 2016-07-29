@@ -32,10 +32,18 @@ body {
 	
 }
 
-#upload_panel {
+#upload_panel_form {
 	margin: auto;
 	padding: 20px;
 	width: 400px;
+	background: #ccc;
+}
+
+#upload_panel_ajax {
+	margin: auto;
+	padding: 20px;
+	width: 400px;
+	background: #AAA;
 }
 
 #foot {
