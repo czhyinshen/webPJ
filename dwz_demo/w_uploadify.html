@@ -1,0 +1,89 @@
+<h2 class="contentTitle">uploadify多文件上传</h2>
+<script src="bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+<style type="text/css" media="screen">
+#dropZone {
+	width: 150px;
+	height: 100px;
+	line-height: 100px;
+	margin: 10px;
+	background: #EEEEEE;
+	border-radius: 4px;
+	box-shadow:inset 0px 1px 2px rgba(0, 0, 0, 0.2);
+	font-size: 15px;
+	text-align: center;
+}
+
+.progress {
+	border-radius: 4px;
+	display: block;
+	width: 250px;
+	height: 20px;
+	margin-bottom: 20px;
+	overflow: hidden;
+	background: linear-gradient(to bottom, #ddd, #eee);
+	background-repeat: repeat-x;
+	box-shadow:inset 0px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.bar {
+	width: 0%;
+	height: 20px;
+	text-align: right;
+	line-height: 20px;
+	background: linear-gradient(to bottom, #0099FF, #00BBEE);
+}
+
+.my-uploadify-button {
+	background:none;
+	border: none;
+	text-shadow: none;
+	border-radius:0;
+}
+
+.uploadify:hover .my-uploadify-button {
+	background:none;
+	border: none;
+}
+
+.fileQueue {
+	width: 400px;
+	height: 150px;
+	overflow: auto;
+	border: 1px solid #E5E5E5;
+	margin-bottom: 10px;
+}
+</style>
+
+
+<div class="pageContent" style="margin: 0 10px" layoutH="50">
+	
+	<input id="fileUpload" type="file" name="file[]" data-url="http://localhost:8080/spring-mvc-jquery-file-upload/rest/controller/upload" multiple />
+	<!--<div id="dropZone">拖入文件</div>-->
+	<div class="divider"></div>
+		<div id="progress" class="progress">
+			<div class="bar" style="width: 0%;"></div>
+		</div>
+	<!--<div class="button"><div class="buttonContent"><button id="btnUpload">上传</button></div></div>-->
+	
+</div>
+
+<script type="text/javascript">
+	console.log("upload");
+	$("#fileUpload").fileupload({
+		dataType: 'json',
+		forceIframeTransport: true,
+		done: function(e, data) {
+			console.log("upload done");
+			console.log(data);
+		},
+		progressall: function(e, data) {
+			var progress = parseInt(data.loaded / data.total * 100, 10);
+			console.log(progress);
+			$("#progress .bar").css(
+				'width',
+				progress + '%'
+			);
+			$("#progress .bar").html(progress+'%');
+		}			
+	});
+</script>
