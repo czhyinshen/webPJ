@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>bjui demo</title>
+		<!--bootstrap css-->
+		<link rel="stylesheet" type="text/css" href="BJUI/themes/css/bootstrap.css"/>
+		<!--core css-->
+		<link rel="stylesheet" type="text/css" href="BJUI/themes/css/style.css"/>
+		<link rel="stylesheet" type="text/css" href="BJUI/themes/blue/core.css"/>
+		<!--plugins css-->
+		<link rel="stylesheet" type="text/css" href="BJUI/plugins/kindeditor_4.1.10/themes/default/default.css"/>
+		<link rel="stylesheet" type="text/css" href="BJUI/plugins/colorpicker/css/bootstrap-colorpicker.min.css"/>
+		<link rel="stylesheet" type="text/css" href="BJUI/plugins/niceValidator/jquery.validator.css"/>
+		<link rel="stylesheet" type="text/css" href="BJUI/plugins/bootstrapSelect/bootstrap-select.css"/>
+		<link rel="stylesheet" type="text/css" href="BJUI/themes/css/FA/css/font-awesome.min.css"/>
+		<!--jquery-->
+		<script src="BJUI/js/jquery-1.11.3.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="BJUI/js/jquery.cookie.js" type="text/javascript" charset="utf-8"></script>
+		<!--bjui-->
+		<script src="BJUI/js/bjui-all.js" type="text/javascript" charset="utf-8"></script>
+		<!--plugins-->
+  		<!--kindeditor-->
+		<script src="BJUI/plugins/kindeditor_4.1.10/kindeditor-all.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="BJUI/plugins/kindeditor_4.1.10/lang/zh_CN.js" type="text/javascript" charset="utf-8"></script>
+		  <!--color picker-->
+		<script src="BJUI/plugins/colorpicker/js/bootstrap-colorpicker.min.js" type="text/javascript" charset="utf-8"></script>
+		  <!--ztree-->
+		<script src="BJUI/plugins/ztree/jquery.ztree.all-3.5.js" type="text/javascript" charset="utf-8"></script>
+		  <!--nice validate-->
+		<script src="BJUI/plugins/niceValidator/jquery.validator.js" type="text/javascript" charset="utf-8"></script>
+		<script src="BJUI/plugins/niceValidator/jquery.validator.themes.js" type="text/javascript" charset="utf-8"></script>
+		  <!--bootstrap-->
+    <script src="BJUI/plugins/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="BJUI/plugins/bootstrapSelect/bootstrap-select.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="BJUI/plugins/bootstrapSelect/defaults-zh_CN.min.js" type="text/javascript" charset="utf-8"></script>
+		  <!--ichake-->
+		<script src="BJUI/plugins/icheck/icheck.min.js" type="text/javascript" charset="utf-8"></script>
+		  <!--dragsort-->
+		<script src="BJUI/plugins/dragsort/jquery.dragsort-0.5.1.min.js" type="text/javascript" charset="utf-8"></script>		
+		<!--other-->
+		<script src="BJUI/plugins/other/jquery.autosize.js" type="text/javascript" charset="utf-8"></script>
+
+		<!--init-->
+		<script type="text/javascript">
+			$(function() {
+			  BJUI.init({
+			    JSPATH      : 'BJUI/',
+			    PLUGINPATH  : 'BJUI/plugins/',
+			    statusCode  : {ok:200, error:300, timeout:301},
+			    ajaxTimeout : 50000,
+			    ui          : {
+			      windowWidth      : 0,
+			      showSlidebar     : true,
+			      clientPaging     : true,
+			      overwriteHomeTab : false,
+			    },
+			    debug       : true
+			  })
+			  
+			  $(document).on('click', 'ul.menu-items > li > a', function(e) {
+			    console.log(e)
+			  })
+			  
+			  var today = new Date()
+			  $("#bjui-date").html(today.formatDate('yyyy/MM/dd'))
+			  setInterval(function() {
+			    today.setSeconds(today.getSeconds() + 1)
+			    $("#bjui-clock").html(today.formatDate('HH:mm:ss'))
+			  }, 1000)
+    })
+    
+    //菜单-单击事件
+    function MainMenuClick(event, treeId, treeNode) {
+      event.preventDefault()
+      
+      if (treeNode.isParent) {
+        var zTree = $.fn.zTree.getZTreeObj(treeId)
+        zTree.expandNode(treeNode, !treeNode.open, false, true, true)
+        return
+      }
+      
+      if (treeNode.target && treeNode.target == 'dialog')
+        $(event.target).dialog({id:treeNode.tabid, url:treeNode.url, title:treeNode.name})
+      else
+        $(event.target).navtab({id:treeNode.tabid, url:treeNode.url, title:treeNode.name, fresh:treeNode.fresh, external:treeNode.external})
+    }
+		</script>
+
+	</head>
+	<body>
+    <div id="bjui-window">
+      <!--header-->
+    	<header id="bjui-header">
+    	  <div class="bjui-navbar-header">
+    	  	<button type="button" class="btn btn-navbar-toggle btn-default" data-toggle="collapse" data-target="#bjui-navbar-collapse">
+    	  	  <i class="fa fa-bars"></i>
+    	  	</button>
+    	  </div>
+    	  <nav id="bjui-navbar-collapse">
+    	    <ul class="bjui-navbar-right">
+    	    	<li class="datetime"><div><span id="bjui-date"></span> <span id="bjui-clock"></span></div></li>
+    	    </ul>
+    	  </nav>
+        <div id="bjui-hnav">
+          <button type="button" class="bjui-hnav-toggle btn-default" data-toggle="collapse" data-target="#bjui-hnav-navbar">
+            <i class="fa fa-bars"></i>
+          </button>
+          <div id="bjui-hnav-navbar-box">
+            <ul id="bjui-hnav-navbar">
+              <!--welcome-->
+              <li><a>Welcome</a></li>
+
+              <!--ztree begin-->
+              <li class="active"><a href="javascript:;" data-toggle="slidebar">Menu 1</a>
+                <div class="items hide" data-noinit="true">
+                	<ul id="bjui-hnav-tree-input" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="true" data-faicon="check-square-o" data-title="First">
+                		<li data-id="1" data-pid="0" data-faicon="folder-open-o" data-faicon-close="folder-o">Item 1</li>
+                		<li data-id="10" data-pid="1" data-url="test.html" data-tabid="item1" data-faicon="check-square-o">1</li>
+                		<li data-id="11" data-pid="1" data-url="fileUpload.html" data-tabid="item2" data-faicon="check-square-o">文件上传</li>
+                	</ul>
+                	<ul id="bjui-hnav-tree-form" class="ztree ztree_main" data-toggle="ztree" data-on-click="MainMenuClick" data-expand-all="true" data-faicon="list" data-title="Second">
+                		<li data-id="1" data-pid="0" data-faicon="folder-open-o" data-faicon-close="folder-o">Item2</li>
+                		<li data-id="10" data-pid="1" data-faicon="folder-open-o" data-faicon-close="folder-o">1</li>
+                	</ul>
+                </div>
+              </li>
+              <!--ztree end-->
+
+              <!--dropdown-->
+			        <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown</a>
+			          <ul class="dropdown-menu" role="menu">
+			          	<li><a href="#">1</a></li>
+			          	<li><a href="#">2</a></li>
+			          </ul>
+			        </li>
+
+            </ul>
+          </div>
+
+        </div>
+    	</header>
+    	<!--container-->
+    	<div id="bjui-container" class="clearfix">
+    		<div id="bjui-leftside">
+            <div id="bjui-sidebar-s">
+                <div class="collapse"></div>
+            </div>
+            <div id="bjui-sidebar">
+                <div class="toggleCollapse"><h2><i class="fa fa-bars"></i> 导航栏 <i class="fa fa-bars"></i></h2><a href="javascript:;" class="lock"><i class="fa fa-lock"></i></a></div>
+                <div class="panel-group panel-main" data-toggle="accordion" id="bjui-accordionmenu" data-heightbox="#bjui-sidebar" data-offsety="26">
+                </div>
+            </div>
+        </div>
+        <div id="bjui-navtab" class="tabsPage">
+            <div class="tabsPageHeader">
+                <div class="tabsPageHeaderContent">
+                    <ul class="navtab-tab nav nav-tabs">
+                        <li data-url="welcome.html"><a href="javascript:;"><span><i class="fa fa-home"></i> #maintab#</span></a></li>
+                    </ul>
+                </div>
+                <div class="tabsLeft"><i class="fa fa-angle-double-left"></i></div>
+                <div class="tabsRight"><i class="fa fa-angle-double-right"></i></div>
+                <div class="tabsMore"><i class="fa fa-angle-double-down"></i></div>
+            </div>
+            <ul class="tabsMoreList">
+                <li><a href="javascript:;">#maintab#</a></li>
+            </ul>
+            <div class="navtab-panel tabsPageContent">
+                <div class="navtabPage unitBox">
+                    <div class="bjui-pageContent" style="background:#FFF;">
+                        Loading...
+                    </div>
+                </div>
+            </div>
+        </div>
+    	</div>
+    	<!--footer-->
+    	<footer id="bjui-footer">
+
+    	</footer>
+    </div>
+	</body>
+</html>
