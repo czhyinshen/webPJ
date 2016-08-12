@@ -1,6 +1,8 @@
 package com.unicomWeb.model;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.springframework.stereotype.Repository;
+
 
 @JsonIgnoreProperties({"bytes"})
 public class FileMeta{

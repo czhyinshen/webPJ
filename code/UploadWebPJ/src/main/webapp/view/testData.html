@@ -1,0 +1,111 @@
+<script type="text/javascript">
+//var editCallback = function (datas) {
+//    return true
+//}
+var afterSave = function ($trs, datas) {
+  console.log(datas)
+}
+var beforeSave = function ($trs, datas) {
+  console.log(datas)
+  return true
+}
+$("#test_datagrid").datagrid({
+    gridTitle:'test data',
+    height:'100%',
+    showToolbar:true,
+    toolbarItem:'all',
+    dataUrl:'/controller/quary',
+    loadType:'GET',
+    local:'remote',
+    fullGrid:true,
+    paging:{pageSize:30, pageCurrent:1, selectPageSize:'30,50,80,100', total:0, showPagenum:5},
+    editUrl:'/controller/update',
+    editMode:'dialog',
+    linenumberAll:true,
+    showEditbtnscol:true,
+    //editCallback:editCallback,
+    //beforeSave:beforeSave,
+    //afterSave:afterSave,
+    columns:[
+        {
+            name:'sn',
+            label:'序列号',
+            edit:false,
+            align:'center'
+        },
+        {
+            name:'mobile_num',
+            label:'用户手机号',
+            //edit:false,
+            align:'center'
+        },
+        {
+            name:'status',
+            label:'发送状态',
+            edit:false,
+            align:'center'
+        },
+        {
+            name:'start_time',
+            label:'发送开始时间',
+            render:function(value){
+              return !value ? '<p style="color: #ccc; margin: 0px">Null</p>' : value
+            },
+            /*edit:false,*/
+            align:'center'
+        },
+        {
+            name:'stop_time',
+            label:'发送终止时间',
+            /*edit:false,*/
+            align:'center'
+        },
+        {
+            name:'stc_msg',
+            label:'静态信息',
+            edit:false,
+            align:'center'
+        },
+        {
+            name:'var_msg',
+            label:'可变信息',
+            edit:false,
+            align:'center'
+        },
+        {
+            name:'in_times',
+            label:'插入时间',
+            edit:false,
+            align:'center'
+        },
+        {
+            name:'msg_lvl',
+            label:'发送等级',
+            edit:false,
+            align:'center'
+        },
+        {
+            name:'opt_id',
+            label:'操作员ID',
+            edit:false,
+            align:'center'
+        }
+    ]
+})
+
+</script>
+<div class="bjui-pageHeader">
+  
+</div>
+<div class="bjui-pageContent tableContent">
+  <table id="test_datagrid" class="table table-bordered" ></table>
+</div>
+<div class="bjui-pageFooter">
+  <ul>
+    <li>
+      <button type="button" class="btn btn-close" data-icon="close">
+        <i class="fa fa-close"></i>关闭
+      </button>
+    </li>
+  </ul>
+</div>

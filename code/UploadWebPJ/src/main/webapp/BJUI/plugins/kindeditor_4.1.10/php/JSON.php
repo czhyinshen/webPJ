@@ -616,10 +616,10 @@ class Services_JSON
                     } else {
                         if ($this->use & SERVICES_JSON_LOOSE_TYPE) {
                             $stk = array(SERVICES_JSON_IN_OBJ);
-                            $data = array();
+                            $obj = array();
                         } else {
                             $stk = array(SERVICES_JSON_IN_OBJ);
-                            $data = new stdClass();
+                            $obj = new stdClass();
                         }
                     }
 
@@ -635,7 +635,7 @@ class Services_JSON
                             return $arr;
 
                         } else {
-                            return $data;
+                            return $obj;
 
                         }
                     }
@@ -673,9 +673,9 @@ class Services_JSON
                                     $val = $this->decode($parts[2]);
 
                                     if ($this->use & SERVICES_JSON_LOOSE_TYPE) {
-                                        $data[$key] = $val;
+                                        $obj[$key] = $val;
                                     } else {
-                                        $data->$key = $val;
+                                        $obj->$key = $val;
                                     }
                                 } elseif (preg_match('/^\s*(\w+)\s*:\s*(\S.*),?$/Uis', $slice, $parts)) {
                                     // name:value pair, where name is unquoted
@@ -683,9 +683,9 @@ class Services_JSON
                                     $val = $this->decode($parts[2]);
 
                                     if ($this->use & SERVICES_JSON_LOOSE_TYPE) {
-                                        $data[$key] = $val;
+                                        $obj[$key] = $val;
                                     } else {
-                                        $data->$key = $val;
+                                        $obj->$key = $val;
                                     }
                                 }
 
@@ -752,7 +752,7 @@ class Services_JSON
                         return $arr;
 
                     } elseif (reset($stk) == SERVICES_JSON_IN_OBJ) {
-                        return $data;
+                        return $obj;
 
                     }
 

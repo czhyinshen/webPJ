@@ -1,0 +1,113 @@
+<!--
+  gridTitle     标题
+  columns       表头
+    name    字段名（关联json数据）
+    label   列标题
+    width   列宽
+    align   对齐方式
+    type    数据类型 string boolean select textarea date lookup spinner
+    attrs   参数
+    items
+    hide
+    menu
+    calc
+    calcTit
+    ...
+  data          表格数据
+  dataUrl       ajax请求数据的url， 优先级低于 data参数
+  loadType      ajax请求方式 GET POST
+  dataType      dataUrl请求数据的类型 json array xml
+  paging        分页属性 pageSize, selectPageSize, pageCurrent, showPagenum, total
+  editUrl       保存编辑、添加数据的url，Ajax请求方式为POST
+  editCallback
+  editMode      inline dialog false
+  delUrl        删除数据的url
+  delType       ajax请求方式 POST GET
+  delPK         primary key
+
+  ...
+
+-->
+<script type="text/javascript">
+    $("#simple_datagrid").datagrid({
+        gridTitle:'datagrid sample',
+        showToolbar:true,
+        showTfoot:true,
+        toolbarItem: 'all',
+        dataUrl:'js/simpleDatagrid.json',
+        loadType:'GET',
+        dataType:'json',
+        local:'local',
+        editUrl:'/',
+        editMode:'dialog',  /*json:{"id":"123", "name":"jack" ... }*/
+        delUrl:'delete',    /*json:[{"id":"123", "name":"jack" ... }]*/
+        delPK:'id',
+        paging:{pageSize:30, pageCurrent:1},
+        fullGrid:true,
+        columns:[
+            {
+                name:'mission_id',
+                label:'任务编号',
+                edit:false,
+                align:'center',
+                width:50,
+                calc:'sum',
+                calcTit:'总计'
+            },
+            {
+                name:'mobile',
+                label:'手机号码',
+                align:'center',
+                width:100
+            },
+            {
+                name:'message',
+                label:'短信内容',
+                align:'left',
+                width:500
+            },
+            {
+                name:'sex',
+                label:'性别',
+                type:'select',
+                items:[{'male':'男'},{'female':'女'}],
+                align:'center',
+                width:'20'
+            },
+            {
+                name:'date',
+                label:'日期',
+                type:'date',
+                align:'center',
+                width:'250'
+            },
+            {
+                label:'vars',
+                align:'center',
+                width:'400',
+                columns:[{
+                    name:'var1',
+                    label:'var1'
+                },
+                {
+                    name:'var2',
+                    label:'var2'
+                },
+                {
+                    name:'var3',
+                    label:'var3'
+                }]
+            }
+        ]
+    })
+</script>
+
+<div class="bjui-pageHeader">
+  
+</div>
+<div class="bjui-pageContent tableContent">
+  <table id="simple_datagrid" class="table table-bordered" ></table>
+</div>
+<div class="bjui-pageFooter">
+  
+</div>

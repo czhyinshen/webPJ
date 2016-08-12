@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -23,11 +22,13 @@ import java.util.Iterator;
 @Controller
 @RequestMapping("/controller")
 public class FileUploadController {
-	FileMeta fileMeta = null;
-    ResponseMeta responseMeta = null;
+
+	private FileMeta fileMeta = null;
+    private ResponseMeta responseMeta = null;
 
     @RequestMapping(value = "/upload",method = RequestMethod.POST)
-    public @ResponseBody ResponseMeta upload(MultipartHttpServletRequest request, HttpServletResponse response)
+    public @ResponseBody
+    ResponseMeta upload(MultipartHttpServletRequest request)
     		throws IllegalStateException, IOException {
         //通用多部分解析器
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
@@ -35,7 +36,7 @@ public class FileUploadController {
             MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest)request;
             Iterator<String> iter = multiRequest.getFileNames();
             MultipartFile mpf = null;
-            responseMeta = new ResponseMeta();
+            ResponseMeta responseMeta = new ResponseMeta();
 
             while (iter.hasNext()){
                 mpf = multiRequest.getFile(iter.next());
@@ -57,16 +58,18 @@ public class FileUploadController {
                         responseMeta.setStatusCode("200");
                         responseMeta.setMessage("success");
                     }
-                }
-                fileMeta = new FileMeta();
-                fileMeta.setFileName(mpf.getOriginalFilename());
-                fileMeta.setFileSize(mpf.getSize()/1024+" Kb");
-                fileMeta.setFileType(mpf.getContentType());
+                    FileMeta fileMeta = new FileMeta();
+                    fileMeta.setFileName(mpf.getOriginalFilename());
+                    fileMeta.setFileSize(mpf.getSize()/1024+" Kb");
+                    fileMeta.setFileType(mpf.getContentType());
 //                files.add(fileMeta);
+                }
             }
             //返回数据
             responseMeta.setData(fileMeta);
         }
         return responseMeta;
     }
+
+
 }

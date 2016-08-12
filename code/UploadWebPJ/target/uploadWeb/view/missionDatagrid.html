@@ -1,0 +1,64 @@
+<script type="text/javascript">
+  	$("#mission_datagrid").datagrid({
+        gridTitle:'任务表',
+        height:'100%',
+        showToolbar:true,
+        showTfoot:true,
+        /*toolbarItem:'all',*/
+        dataUrl:'js/missions.json',
+        loadType:'GET',
+        showEditbtnscol:false,
+        /*editUrl:'/',*/
+        /*editMode:'inline',*/
+        /*fullGrid:true,*/
+        columns:[
+            {
+                name:'mission_id',
+                label:'任务编号',
+                edit:false,
+                align:'center',
+                width:100
+            },
+            {
+                name:'opt_id',
+                label:'操作员',
+                edit:false,
+                align:'center',
+                width:180
+            },
+            {
+                name:'create_time',
+                label:'创建时间',
+                type:'date',
+                pattern:'yyyy-MM-dd HH:mm:ss',
+                /*edit:false,*/
+                align:'center',
+                width:300
+            },
+            {
+                name:'status',
+                label:'任务状态',
+                items:{'complete':'已完成', 'checking':'审查', 'create':'已创建'},
+                edit:false,
+                align:'center',
+                width:180
+            },
+            {
+                name:'record_total',
+                label:'条目总数',
+                edit:false,
+                align:'center',
+                width:300
+            }
+        ]
+  	})
+</script>
+<div class="bjui-pageHeader">
+  
+</div>
+<div class="bjui-pageContent tableContent">
+  <table id="mission_datagrid" class="table table-bordered" ></table>
+</div>
+<div class="bjui-pageFooter">
+  
+</div>
