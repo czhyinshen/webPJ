@@ -35,14 +35,8 @@ public class DataEditController {
 
         String pageSize = request.getParameter("pageSize");
         String pageCurrent = request.getParameter("pageCurrent");
-
         DatabaseMeta databaseMeta = new DatabaseMeta();
-        if (pageCurrent != null && pageSize != null) {
-            System.out.println(pageCurrent+" " +pageSize);
-            databaseMeta.setPageSize(Integer.parseInt(pageSize));
-            databaseMeta.setPageCurrent(Integer.parseInt(pageCurrent));
-        }
-        databaseMeta.setList(customerService.quaryAll());
+        databaseMeta.paging(customerService.quaryAll(),pageCurrent,pageSize);
 
         return databaseMeta;
     }
@@ -56,7 +50,7 @@ public class DataEditController {
         Gson gson = new Gson();
         JSON.parse(jsonMeta).getClass();
         Customer[] customers;
-        if (jsonMeta.substring(0).equals("[") && jsonMeta.substring(jsonMeta.length() - 1).equals("]")) {
+        if (jsonMeta.startsWith("[") && jsonMeta.endsWith("]")) {
             customers= gson.fromJson(jsonMeta, Customer[].class);
         }else {
             Customer customer = gson.fromJson(jsonMeta, Customer.class);
@@ -94,7 +88,6 @@ public class DataEditController {
         databaseMeta.setList(customerService.quaryAll());
         return databaseMeta;
     }
-
 
 }
 

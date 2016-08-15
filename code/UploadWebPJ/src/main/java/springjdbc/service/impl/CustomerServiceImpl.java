@@ -33,7 +33,7 @@ public class CustomerServiceImpl implements CustomerService {
         for (int i = 0; i < customers.length; i++) {
             if (quarySome("sn", customers[i].getSn()).size() > 0) {
                 results[i] = customerDao.update(customers[i]);
-            }else {
+            } else {
                 results[i] = customerDao.add(customers[i]);
             }
         }
@@ -53,5 +53,6 @@ public class CustomerServiceImpl implements CustomerService {
     public List<Customer> quarySome(String id, String value) {
         return customerDao.quarySome(id, value);
     }
+
 
 }

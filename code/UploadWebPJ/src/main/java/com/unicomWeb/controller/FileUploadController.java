@@ -2,6 +2,7 @@ package com.unicomWeb.controller;
 
 import com.unicomWeb.model.FileMeta;
 import com.unicomWeb.model.ResponseMeta;
+import com.unicomWeb.model.StatusCode;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -52,11 +53,10 @@ public class FileUploadController {
                         try {
                             mpf.transferTo(localFile);
                         }catch (IOException e){
-                            responseMeta.setStatusCode("300");
-                            responseMeta.setMessage("failed");
+                            responseMeta.setStatusCode(StatusCode.ERROR);
                         }
-                        responseMeta.setStatusCode("200");
-                        responseMeta.setMessage("success");
+                        responseMeta.setStatusCode(StatusCode.OK);
+
                     }
                     FileMeta fileMeta = new FileMeta();
                     fileMeta.setFileName(mpf.getOriginalFilename());
@@ -70,6 +70,4 @@ public class FileUploadController {
         }
         return responseMeta;
     }
-
-
 }

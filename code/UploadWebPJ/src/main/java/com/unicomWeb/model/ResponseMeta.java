@@ -37,6 +37,7 @@ public class ResponseMeta {
                 break;
             case ERROR:
                 this.statusCode = "300";
+                break;
         }
     }
 

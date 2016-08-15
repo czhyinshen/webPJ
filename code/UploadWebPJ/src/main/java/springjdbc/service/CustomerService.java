@@ -1,6 +1,7 @@
 package springjdbc.service;
 
 import springjdbc.pojo.Customer;
+import springjdbc.pojo.Operator;
 
 import java.util.List;
 
@@ -17,5 +18,6 @@ public interface CustomerService {
     int delete(Customer[] customers);
 
     List<Customer> quarySome(String id ,String value);
+
 
 }

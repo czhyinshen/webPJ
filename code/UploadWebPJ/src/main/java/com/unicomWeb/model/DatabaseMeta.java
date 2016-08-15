@@ -14,11 +14,11 @@ public class DatabaseMeta {
     private int pageCurrent = 1;
     private List<Customer> list;
 
-    private int getTotal() {
+    public int getTotal() {
         return total;
     }
 
-    private void setTotal(int total) {
+    public void setTotal(int total) {
 
         this.total = total;
     }
@@ -28,9 +28,6 @@ public class DatabaseMeta {
     }
 
     public void setPageCurrent(int pageCurrent) {
-        if (pageCurrent > 1) {
-            list = list.subList(pageCurrent * pageSize - 1, pageCurrent * (pageSize + 1) - 1);
-        }
         this.pageCurrent = pageCurrent;
     }
 
@@ -47,10 +44,31 @@ public class DatabaseMeta {
     }
 
     public void setList(List<Customer> list) {
-        if (list.size() > pageSize && list.size() > 0) {
-            list = list.subList(0, pageSize - 1);
-        }
-        total = list.size() / pageSize + list.size() % pageSize > 0 ? 1 : 0;
+
         this.list = list;
+    }
+
+    public void paging(List<Customer> list, String pageCurrent, String pageSize) {
+        int parPageSize = this.pageSize;
+        int parPageCurrent = this.pageCurrent;
+
+        if (pageCurrent != null) {
+            parPageSize=  Integer.parseInt(pageSize);
+            this.setPageSize(parPageSize);
+        }
+
+        if (pageCurrent != null) {
+            parPageCurrent = Integer.parseInt(pageCurrent);
+            this.setPageCurrent(parPageCurrent);
+        }
+
+        total = list.size() ;
+        if (list.size() > parPageSize) {
+            int start = (parPageCurrent - 1) * parPageSize;
+            int end = parPageCurrent * parPageSize;
+            list = list.subList(start, end > list.size() ? list.size() : end);
+        }
+        this.setList(list);
+
     }
 }
