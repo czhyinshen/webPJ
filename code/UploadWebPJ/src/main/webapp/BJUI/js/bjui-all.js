@@ -49,7 +49,8 @@
             afterCloseNavtab  : 'bjui.afterCloseNavtab',
             afterCloseDialog  : 'bjui.afterCloseDialog'
         },
-        pageInfo: {pageCurrent:'pageCurrent', pageSize:'pageSize', orderField:'orderField', orderDirection:'orderDirection'},
+        //20160815 pageInfo add total prop total:'total'
+        pageInfo: {total:'total', pageCurrent:'pageCurrent', pageSize:'pageSize', orderField:'orderField', orderDirection:'orderDirection'},
         alertMsg: {displayPosition:'topcenter', alertTimeout: 6000}, //alertmsg display position && close timeout
         ajaxTimeout: 30000,
         statusCode: {ok:200, error:300, timeout:301},
@@ -4750,8 +4751,6 @@
             if (options.type && !options.httpMethod)
                 options.httpMethod = options.type
             
-            console.log(options)
-            
             $.extend(downloadOptions, options)
             
             if (!downloadOptions.data) downloadOptions.data = {}
@@ -7070,7 +7069,7 @@
         beforeDelete    : null,     // Function - before delete method, return true execute delete method
         beforeSave      : null,     // Function - before save method, arguments($trs, datas)
         afterSave       : null,     // Function - after save method, arguments($trs, datas)
-        afterDelete     : null      // Function - after delete method
+        afterDelete     : null     // Function - after delete method
     }
     
     Datagrid.renderItem = function(value, data, items) {
@@ -7169,7 +7168,7 @@
                 return true
             },
             afterSave: function($trs, data) {
-                var afterSave = options.afterSave, childUpdate = that.options.childUpdate, $parent = that.$element.data('bjui.datagrid.parent'),
+                var afterSave = options.afterSave, childUpdate = that.options.childUpdate, $parent = that.$element.data('bjui.datagrid.parent'), rowspan,
                     updateParent = function($tr) {
                         $tr.closest('table').datagrid('updateRow', $tr)
                     }
@@ -7304,12 +7303,12 @@
                             that.paging.pageSize = parseInt(data[BJUI.pageInfo.pageSize], 10)
                         }
                     }
-                    
+
                     that.paging.pageCount = tools.getPageCount(that.paging.pageSize, that.paging.total)
-                    
+
                     if (that.paging.pageCurrent > that.paging.pageCount) that.paging.pageCurrent = that.paging.pageCount
                     if (!that.paging.pageCurrent) that.paging.pageCurrent = 1
-                    
+
                     this.initTbody(list, refreshFlag)
                 }
                 
@@ -8143,7 +8142,6 @@
             },
             getRemoteFilterData: function(isPaging, pageSize, pageCurrent) {
                 var filterDatas = {}
-                
                 if (that.filterDatas && !$.isEmptyObject(that.filterDatas)) {
                     $.each(that.filterDatas, function(name, v) {
                         if (!v.datas) {
@@ -8155,7 +8153,14 @@
                         
                         v.model.isFiltered = true
                         v.model.th.trigger('bjui.datagrid.th.filter', [true])
-                        
+
+                        //20160816 add "filterField" to filterDatas for filter check
+                        if (filterDatas['filterFields']) {
+                            filterDatas['filterFields'] = filterDatas['filterFields'] + ',' + name
+                        } else {
+                            filterDatas['filterFields'] = name
+                        }
+
                         if (options.jsonPrefix)
                             name = options.jsonPrefix +'.'+ name
                         
@@ -8184,7 +8189,6 @@
                 filterDatas[BJUI.pageInfo.pageCurrent] = that.paging.pageCurrent
                 
                 that.$element.data('filterDatas', filterDatas)
-                
                 return filterDatas
             },
             // set data for Dom
@@ -11415,7 +11419,8 @@
                     }
                     
                     if (complete) {
-                        $.extend(data, typeof returnData === 'object' && returnData)
+                        //change in 20160812
+                        //$.extend(data, typeof returnData === 'object' && returnData)
                         
                         // if add to the empty grid
                         if ($tr.hasClass(that.classnames.tr_add) && $tr.length === that.$tbody.find('> tr:not(.'+ that.classnames.tr_child +')').length && that.fixtedColumnWidthCount) {
@@ -11430,7 +11435,7 @@
                             BJUI.dialog('close', editOptions.options.id)
                         else if (type === 'navtab')
                             BJUI.navtab('closeTab', editOptions.options.id)
-                            
+
                         that.tools.afterSave($tr, data)
                         
                         // refresh child
@@ -12059,8 +12064,9 @@
                             data_index = data_index / 2
                         
                         data = that.isDom ? $tr.data('initData') : that.data[data_index]
-                        
-                        $.extend(data, typeof returnData[i] === 'object' && returnData[i])
+
+                        //change in 20160812
+                        //$.extend(data, typeof returnData[i] === 'object' && returnData[i])
                         
                         if (that.allData && that.allData[data.gridIndex]) {
                             $.extend(that.allData[data.gridIndex], data)
@@ -12068,7 +12074,6 @@
                         
                         that.inlineEditComplete($tr, data)
                     })
-                    
                     that.tools.afterSave($trs, postData)
                 }
             }
@@ -12128,8 +12133,9 @@
                             } else if (typeof json === 'object') {
                                 returnData = json
                             }
-                            
-                            $.extend(data, typeof returnData === 'object' && returnData)
+
+                            //change in 20160812
+                            //$.extend(data, typeof returnData === 'object' && returnData)
                             
                             if (that.allData && that.allData[data.gridIndex]) {
                                 $.extend(that.allData[data.gridIndex], data)
@@ -12139,7 +12145,6 @@
                             if ($tr.hasClass(that.classnames.tr_add) && $tr.length === that.$tbody.find('> tr:not(.'+ that.classnames.tr_child +')').length && that.fixtedColumnWidthCount) {
                                 that.fixedColumnWidth = true
                             }
-                            
                             that.inlineEditComplete($tr, data, $btn)
                             that.tools.afterSave($tr, data)
                         }
@@ -12614,8 +12619,9 @@
                                 } else if (typeof json === 'object') {
                                     returnData = json
                                 }
-                                
-                                $.extend(data, typeof returnData === 'object' && returnData)
+                                //change in 20160812
+                                //将两个或更多对象的内容合并到第一个对象
+                                //$.extend(data, typeof returnData === 'object' && returnData)
                                 
                                 // if add to the empty grid
                                 if ($tr.hasClass(that.classnames.tr_add) && $tr.length === that.$tbody.find('> tr:not(.'+ that.classnames.tr_child +')').length && that.fixtedColumnWidthCount) {
@@ -12632,7 +12638,7 @@
                         datas.push(data)
                         if (that.tools.beforeSave($tr, datas)) {
                             var type = options.editType, opts = {url:options.editUrl, data:JSON.stringify(postData), type:'POST', okCallback:callback}
-                            
+
                             if (type && type === 'raw') {
                                 opts.contentType = 'application/json'
                             } else {

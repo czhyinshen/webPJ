@@ -1,9 +1,7 @@
 package com.unicomWeb.controller;
 
 import com.unicomWeb.model.ResponseMeta;
-import com.unicomWeb.model.StatusCode;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -37,16 +35,19 @@ public class LoginController {
         if (operator != null){
             if (operator.getOptPWD().equals(optPW)) {
                 if (request.getParameter("remember").equals("true")) {
-                    Cookie cookie = new Cookie("username", optID);
+                    Cookie cookie = new Cookie("optID", optID);
                     cookie.setMaxAge(7 * 24 * 3600);
                     cookie.setPath("/");
                     response.addCookie(cookie);
                 }
-                responseMeta.setStatusCode(StatusCode.OK);
+                responseMeta.setStatusCode(ResponseMeta.StatusCode.OK);
                 responseMeta.setMessage("OK");
                 Map<String, String> jumpUrl = new HashMap<>();
                 jumpUrl.put("url", "/index.html");
                 responseMeta.setData(jumpUrl);
+            }else {
+                responseMeta.setStatusCode(ResponseMeta.StatusCode.ERROR);
+                responseMeta.setMessage("密码或用户名错误");
             }
         }
         return responseMeta;

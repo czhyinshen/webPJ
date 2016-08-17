@@ -2,7 +2,6 @@ package com.unicomWeb.controller;
 
 import com.unicomWeb.model.FileMeta;
 import com.unicomWeb.model.ResponseMeta;
-import com.unicomWeb.model.StatusCode;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,7 +36,7 @@ public class FileUploadController {
             MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest)request;
             Iterator<String> iter = multiRequest.getFileNames();
             MultipartFile mpf = null;
-            ResponseMeta responseMeta = new ResponseMeta();
+            responseMeta = new ResponseMeta();
 
             while (iter.hasNext()){
                 mpf = multiRequest.getFile(iter.next());
@@ -53,12 +52,12 @@ public class FileUploadController {
                         try {
                             mpf.transferTo(localFile);
                         }catch (IOException e){
-                            responseMeta.setStatusCode(StatusCode.ERROR);
+                            responseMeta.setStatusCode(ResponseMeta.StatusCode.ERROR);
                         }
-                        responseMeta.setStatusCode(StatusCode.OK);
+                        responseMeta.setStatusCode(ResponseMeta.StatusCode.OK);
 
                     }
-                    FileMeta fileMeta = new FileMeta();
+                    fileMeta = new FileMeta();
                     fileMeta.setFileName(mpf.getOriginalFilename());
                     fileMeta.setFileSize(mpf.getSize()/1024+" Kb");
                     fileMeta.setFileType(mpf.getContentType());

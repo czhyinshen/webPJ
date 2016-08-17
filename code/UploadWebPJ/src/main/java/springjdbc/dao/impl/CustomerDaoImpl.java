@@ -1,5 +1,6 @@
 package springjdbc.dao.impl;
 
+import com.sun.javafx.collections.MappingChange;
 import org.springframework.dao.QueryTimeoutException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -11,7 +12,10 @@ import javax.annotation.Resource;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.sql.SQLTimeoutException;
-import java.util.List;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by York on 2016/8/9.
@@ -26,12 +30,11 @@ public class CustomerDaoImpl implements CustomerDao {
 
     public int add(Customer customer) {
         int result = 0;
+        int sysResult;
+        insertSysDate(customer);
         String sql = "INSERT INTO " + chartName + "(SN,MOBILE_NUM,STATUS,IN_TIMES,OPT_ID) VALUES(?,?,?,?,?)";
-        System.out.println(sql);
         try {
-            System.out.println(customer.getIn_times());
             result = jdbcTemplate.update(sql, customer.getSn(), customer.getMobile_num(), customer.getStatus(), customer.getIn_times(), customer.getOpt_id());
-            System.out.println(result);
         } catch (QueryTimeoutException e) {
             e.printStackTrace();
         }
@@ -43,7 +46,6 @@ public class CustomerDaoImpl implements CustomerDao {
     public List<Customer> quaryAll() {
         String sql = "SELECT * FROM " + chartName;
         jdbcTemplate.setQueryTimeout(1000 * 10);
-
         List<Customer> list = null;
         try {
             list = jdbcTemplate.query(sql, new CustomerResultSet());
@@ -56,11 +58,14 @@ public class CustomerDaoImpl implements CustomerDao {
 
     @Override
     public List<Customer> quarySome(String id, String value) {
+
         String sql = "SELECT  * FROM " + chartName + " where " + id + " = " + value;
         List<Customer> list = null;
+        if (Objects.equals(value, "")) {
+            return null;
+        }
         try {
             list = jdbcTemplate.query(sql, new CustomerResultSet());
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -114,4 +119,64 @@ public class CustomerDaoImpl implements CustomerDao {
         }
     }
 
+    //获取数据库时间
+    private void insertSysDate(Customer customer) {
+        String sysDateSql = "SELECT sysdate DBdate FROM dual";
+        Map<String, Object> map = jdbcTemplate.queryForMap(sysDateSql);
+        Timestamp ts = (Timestamp) map.get("DBdate");
+        DateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        String tsStr = "";
+        int x = (int) (Math.random() * 1000);
+        try {
+            tsStr = sdf.format(ts) + x;
+            customer.setSn(tsStr);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<Customer> quaryBySort(String dir, String value) {
+        String sql = null;
+        sql = "SELECT * FROM " + chartName + " ORDER BY " + value + " " + dir;
+        jdbcTemplate.setQueryTimeout(1000 * 10);
+        List<Customer> list = null;
+        System.out.println(sql);
+        try {
+            list = jdbcTemplate.query(sql, new CustomerResultSet());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<Customer> quarryByFilter(Map valueMap,Map operatorMap) {
+        String sql = null;
+        Set valueSet = valueMap.keySet();
+        Set operatorSet = operatorMap.keySet();
+        Iterator valueIt = valueSet.iterator();
+        Iterator operatorIt = operatorSet.iterator();
+
+        String values = " ";
+        String operatorName = "";
+        String pattern = "";
+        while (valueIt.hasNext()) {
+            String value = (String) valueIt.next();
+            pattern = (String) valueMap.get(value);
+            String operator = (String)operatorIt.next();
+            operatorName = (String) operatorMap.get(operator);
+            values = value ;
+            System.out.println("value:"+value+"pattern:"+pattern+"opeN："+operatorName);
+        }
+
+        sql = "SELECT * " + " FROM " + chartName + " WHERE " + values + " " + operatorName +" "+ pattern;
+        List<Customer> list = null;
+        System.out.println("values:"+values+sql);
+        try {
+            list = jdbcTemplate.query(sql, new CustomerResultSet());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

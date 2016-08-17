@@ -16,6 +16,10 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -33,15 +37,42 @@ public class DataEditController {
     @ResponseBody
     DatabaseMeta quaryAll(HttpServletRequest request) throws IllegalStateException, IOException {
 
+        Map<String, String> map = request.getParameterMap();
+        DatabaseMeta databaseMeta = new DatabaseMeta();
+        List<Customer> customers;
+
         String pageSize = request.getParameter("pageSize");
         String pageCurrent = request.getParameter("pageCurrent");
-        DatabaseMeta databaseMeta = new DatabaseMeta();
-        databaseMeta.paging(customerService.quaryAll(),pageCurrent,pageSize);
+        String orderField = request.getParameter("orderField");
+        String orderDirection = request.getParameter("orderDirection");
+        String[] filterFields = request.getParameterValues("filterFields");
+
+
+        if (orderField != null) {
+            customers = customerService.quaryBySort(orderDirection, orderField);
+
+        } else if (filterFields != null) {
+
+            Map<String, String> filterMap = new HashMap<>();
+            Map<String, String> operatorMap = new HashMap<>();
+
+            for (int i = 0; i < filterFields.length; i++) {
+                filterMap.put(filterFields[i], request.getParameter(filterFields[i]));
+                String operator = filterFields[i] + ".operator";
+                operatorMap.put(operator, request.getParameter(operator));
+            }
+
+            customers = customerService.quarryByFilter(filterMap,operatorMap);
+        } else {
+            customers = customerService.quaryAll();
+        }
+
+        databaseMeta.paging(customers, pageCurrent, pageSize);
 
         return databaseMeta;
     }
 
-//添加或删除
+    //添加或删除
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public
     @ResponseBody
@@ -51,8 +82,8 @@ public class DataEditController {
         JSON.parse(jsonMeta).getClass();
         Customer[] customers;
         if (jsonMeta.startsWith("[") && jsonMeta.endsWith("]")) {
-            customers= gson.fromJson(jsonMeta, Customer[].class);
-        }else {
+            customers = gson.fromJson(jsonMeta, Customer[].class);
+        } else {
             Customer customer = gson.fromJson(jsonMeta, Customer.class);
             customers = new Customer[1];
             customers[0] = customer;

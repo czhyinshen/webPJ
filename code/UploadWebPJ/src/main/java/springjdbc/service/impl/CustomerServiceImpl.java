@@ -7,6 +7,7 @@ import springjdbc.service.CustomerService;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by York on 2016/8/9.
@@ -29,11 +30,13 @@ public class CustomerServiceImpl implements CustomerService {
 
     public int[] update(Customer[] customers) {
         int[] results = new int[customers.length];
-
         for (int i = 0; i < customers.length; i++) {
-            if (quarySome("sn", customers[i].getSn()).size() > 0) {
+
+            if (quarySome("sn", customers[i].getSn()) != null) {
                 results[i] = customerDao.update(customers[i]);
+
             } else {
+                System.out.println("list = " + quarySome("sn", customers[i].getSn()));
                 results[i] = customerDao.add(customers[i]);
             }
         }
@@ -54,5 +57,16 @@ public class CustomerServiceImpl implements CustomerService {
         return customerDao.quarySome(id, value);
     }
 
+    @Override
+    public List<Customer> quaryBySort(String dir,String value){
 
+        return customerDao.quaryBySort(dir,value);
+    }
+
+    @Override
+    public List<Customer> quarryByFilter(Map valueMap,Map operatorMap){
+
+        return customerDao.quarryByFilter(valueMap,operatorMap);
+
+    }
 }

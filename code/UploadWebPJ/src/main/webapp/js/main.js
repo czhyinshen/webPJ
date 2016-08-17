@@ -1,4 +1,4 @@
-var COOKIE_NAME = 'username';
+var COOKIE_NAME = 'optID';
 $(document).ready(function() {
   checkCookie();
 });

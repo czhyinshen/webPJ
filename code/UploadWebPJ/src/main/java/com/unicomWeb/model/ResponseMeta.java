@@ -6,7 +6,11 @@ package com.unicomWeb.model;
  */
 
 public class ResponseMeta {
-
+    public enum StatusCode {
+        OK,
+        TIMEOUT,
+        ERROR
+    }
     private String statusCode;
     private String message;
     private Object data;
